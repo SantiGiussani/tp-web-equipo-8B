@@ -14,6 +14,14 @@
 <body>
     <form id="form1" runat="server">
         <div>
+        <ul> 
+        <li> <a runat="server" href="home.aspx"> inicio </a> </li>
+        <li> <a runat="server" href="Vouchers.aspx"> Vouchers </a> </li>
+        <li> <a runat="server" href="Articulos.aspx"> Articulos </a> </li>
+        <li> <a runat="server" href="Contacto.aspx"> Registrate! </a> </li>
+        </ul>
+        </div>
+        <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Promo ganá!</a>
