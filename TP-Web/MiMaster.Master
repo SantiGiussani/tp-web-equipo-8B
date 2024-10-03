@@ -14,7 +14,7 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+            <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="Home.aspx">Promo Ganá!</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,16 +33,14 @@
         </div>
 
 
-
-
-        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-        </asp:ContentPlaceHolder>
-
-
+        <div class="container">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
 
 
         <footer class="bg-dark text-white text-center py-3">
-            <p class="mb-0">&copy; 2024 Desarrollado por el Grupo 8B. Todos los derechos reservados.</p>
+            <p class="mb-0">&copy; 2024 Desarrollado por el Grupo 8B</p>
         </footer>
 
     </form>

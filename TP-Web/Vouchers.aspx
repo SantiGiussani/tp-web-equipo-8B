@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="Vouchers.aspx.cs" Inherits="TP_Web.Pagina1" %>
+﻿<%@ Page Title="Vouchers" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="Vouchers.aspx.cs" Inherits="TP_Web.Pagina1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -10,9 +10,9 @@
             <div class="mb-3">
                 <br />
                 <label for="txtCodigo" class="form-label">Ingresá el código de tu voucher!</label>
-                <asp:TextBox runat="server" CssClass="form-control" placeholder="XXXXXXXXXXXXXXX" ID="txtCodigo" />
+                <asp:TextBox ID="txtVoucher" CssClass="form-control" placeholder="XXXXXXXXXXXXXXX" runat="server" />
                 <br />
-                <asp:Button Text="Siguiente" CssClass="btn btn-primary" runat="server" ID="btnSiguiente" />
+                <asp:Button Text="Siguiente" ID="btnIngresoVoucher" CssClass="btn btn-primary" OnClick="btnIngresoVoucher_Click" runat="server" />
             </div>
         </div>
         <div class="col-2"></div>

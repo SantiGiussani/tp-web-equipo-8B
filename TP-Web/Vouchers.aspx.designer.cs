@@ -15,21 +15,21 @@ namespace TP_Web
     {
 
         /// <summary>
-        /// Control txtCodigo.
+        /// Control txtVoucher.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCodigo;
+        protected global::System.Web.UI.WebControls.TextBox txtVoucher;
 
         /// <summary>
-        /// Control btnSiguiente.
+        /// Control btnIngresoVoucher.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSiguiente;
+        protected global::System.Web.UI.WebControls.Button btnIngresoVoucher;
     }
 }
