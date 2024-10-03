@@ -13,9 +13,8 @@ namespace TP_Web
         protected void Page_Load(object sender, EventArgs e)
         {
             ArticuloNegocio negocio = new ArticuloNegocio();
-            dgvArticulos.DataSource = negocio.listarConSP();
-            dgvArticulos.DataBind();
-
+            rptArticulos.DataSource = negocio.listarConSP();
+            rptArticulos.DataBind();
         }
     }
 }
