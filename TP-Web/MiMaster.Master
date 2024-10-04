@@ -23,8 +23,10 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
+                            <a class="nav-link" runat="server" href="Home.aspx">Home</a>
                             <a class="nav-link" runat="server" href="index.aspx">Carga tu Voucher</a>
-                            <<a class="nav-link" runat="server" href="Articulos.aspx">Artículos</a>
+                        </div>
+                        <div class="navbar-nav ms-auto">
                             <a class="nav-link" runat="server" href="Contacto.aspx">Registrate!</a>
                         </div>
                     </div>
