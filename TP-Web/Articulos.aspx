@@ -4,7 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <h1>Nuestros articulos</h1>
+    <h1>Elegi el premio por el cual queres participar!</h1>
     <br />
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 d-flex justify-content-center">
@@ -37,7 +37,8 @@
                             <h5 class="card-title text-center"><strong><%# Eval("Nombre") %></strong></h5>
                             <p class="card-text text-center"><%# Eval("Descripcion") %></p>
                             <div class="mt-auto d-flex justify-content-center">
-                                <asp:Button Text="Elegir" CssClass="btn btn-primary" runat="server" />
+                                <asp:Button Text="Elegir" ID="btnElegirPremio" CssClass="btn btn-primary" runat="server"
+                                    CommandArgument='<%#Eval("Id")%>' CommandName="IdArticulo" OnClick="btnElegirPremio_Click"/>
                             </div>
                         </div>
                     </div>

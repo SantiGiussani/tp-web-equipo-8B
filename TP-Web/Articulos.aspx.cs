@@ -13,8 +13,17 @@ namespace TP_Web
         protected void Page_Load(object sender, EventArgs e)
         {
             ArticuloNegocio negocio = new ArticuloNegocio();
-            rptArticulos.DataSource = negocio.listar();
-            rptArticulos.DataBind();
+            if (!IsPostBack)
+            {
+                rptArticulos.DataSource = negocio.listar();
+                rptArticulos.DataBind();
+            }
+        }
+
+        protected void btnElegirPremio_Click(object sender, EventArgs e)
+        {
+            string IDArticulo = ((Button)sender).CommandArgument;
+            Response.Redirect("Contacto.aspx?ID=" + IDArticulo);
         }
     }
 }
