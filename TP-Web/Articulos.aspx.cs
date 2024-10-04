@@ -13,7 +13,7 @@ namespace TP_Web
         protected void Page_Load(object sender, EventArgs e)
         {
             ArticuloNegocio negocio = new ArticuloNegocio();
-            rptArticulos.DataSource = negocio.listarConSP();
+            rptArticulos.DataSource = negocio.listar();
             rptArticulos.DataBind();
         }
     }

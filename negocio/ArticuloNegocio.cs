@@ -15,62 +15,7 @@ namespace negocio
     public class ArticuloNegocio
     {
 
-        public List<Articulo> listarConSP()
-        {
-            List<Articulo> lista = new List<Articulo>();
-            AccesoDatos datos = new AccesoDatos();
 
-            try
-            {
-                //datos.setearConsulta("Select A.Id, A.Codigo, A.Nombre, A.Descripcion, M.Descripcion Marca, C.Descripcion Categoria, A.Precio from ARTICULOS A Left Join CATEGORIAS C on A.IdCategoria = C.Id Left Join MARCAS M on A.IdMarca = M.Id");
-                datos.setearProcedimiento("spListarArticulos");
-                datos.ejecutarLectura();
-
-                while (datos.Lector.Read())
-                {
-                    Articulo aux = new Articulo();
-                    aux.Id = (int)datos.Lector["Id"];
-                    aux.Codigo = (string)datos.Lector["Codigo"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Descripcion = (string)datos.Lector["Descripcion"];
-                    aux.Marca_ = new Marca();
-                    if (!(datos.Lector["Marca"] is DBNull))
-                    {
-                        aux.Marca_.Descripcion = (string)datos.Lector["Marca"];
-                    }
-                    else
-                    {
-                        aux.Marca_.Descripcion = "";
-                    }
-                    aux.Categoria_ = new Categoria();
-                    if (!(datos.Lector["Categoria"] is DBNull))
-                    {
-                        aux.Categoria_.Descripcion = (string)datos.Lector["Categoria"];
-                    }
-                    else
-                    {
-                        aux.Categoria_.Descripcion = "";
-                    }
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-                    ImagenNegocio imagenNegocio = new ImagenNegocio();
-                    aux.ListaImagenes = imagenNegocio.listar(aux.Id);
-
-                    lista.Add(aux);
-                }
-
-                return lista;
-            }
-
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-
-        }
         public List<Articulo> listar()
         {
             List<Articulo> lista = new List<Articulo>();
@@ -126,7 +71,7 @@ namespace negocio
             
         }
 
-        public List<Articulo> Listar(string campo, string criterio, string buscar)
+        public List<Articulo> filtrar(string campo, string criterio, string buscar)
         {
             List<Articulo> lista = new List<Articulo>();
             AccesoDatos accesoDatos = new AccesoDatos();
@@ -239,7 +184,6 @@ namespace negocio
             }
         }
 
-
         public void eliminar(int id)
         {
             try
@@ -254,12 +198,6 @@ namespace negocio
                 throw ex;
             }
         }
-
-
-
-
-
-
 
         public void modificar(Articulo art)
         {
@@ -285,12 +223,6 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
-
-
-
-
-
-
 
         public void actualizarImagenes(Articulo art)
         {
@@ -331,8 +263,6 @@ namespace negocio
             }
         }
 
-
-
         public bool existeCodigo(string codigo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -358,7 +288,61 @@ namespace negocio
         }
 
 
+        /*
+        public List<Articulo> listarConSP()
+        {
+            List<Articulo> lista = new List<Articulo>();
+            AccesoDatos datos = new AccesoDatos();
 
+            try
+            {
+                datos.setearProcedimiento("spListarArticulos");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Articulo aux = new Articulo();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Codigo = (string)datos.Lector["Codigo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Marca_ = new Marca();
+                    if (!(datos.Lector["Marca"] is DBNull))
+                    {
+                        aux.Marca_.Descripcion = (string)datos.Lector["Marca"];
+                    }
+                    else
+                    {
+                        aux.Marca_.Descripcion = "";
+                    }
+                    aux.Categoria_ = new Categoria();
+                    if (!(datos.Lector["Categoria"] is DBNull))
+                    {
+                        aux.Categoria_.Descripcion = (string)datos.Lector["Categoria"];
+                    }
+                    else
+                    {
+                        aux.Categoria_.Descripcion = "";
+                    }
+                    aux.Precio = (decimal)datos.Lector["Precio"];
+                    ImagenNegocio imagenNegocio = new ImagenNegocio();
+                    aux.ListaImagenes = imagenNegocio.listar(aux.Id);
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }*/
 
     }
 }
