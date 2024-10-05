@@ -93,6 +93,7 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\estilos.css" />
+    <Content Include="DetalleArticulo.aspx" />
     <Content Include="ErrorVoucher.aspx" />
     <Content Include="FinalizacionExitosa.aspx" />
     <Content Include="Global.asax" />
@@ -117,6 +118,13 @@
     </Compile>
     <Compile Include="Contacto.aspx.designer.cs">
       <DependentUpon>Contacto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DetalleArticulo.aspx.cs">
+      <DependentUpon>DetalleArticulo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DetalleArticulo.aspx.designer.cs">
+      <DependentUpon>DetalleArticulo.aspx</DependentUpon>
     </Compile>
     <Compile Include="ErrorVoucher.aspx.cs">
       <DependentUpon>ErrorVoucher.aspx</DependentUpon>
