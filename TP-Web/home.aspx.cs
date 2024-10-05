@@ -12,9 +12,18 @@ namespace TP_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            ArticuloNegocio negocio = new ArticuloNegocio();
-            rptArticulos.DataSource = negocio.listar();
-            rptArticulos.DataBind();
+            if (!IsPostBack)
+            {
+                ArticuloNegocio negocio = new ArticuloNegocio();
+                rptArticulos.DataSource = negocio.listar();
+                rptArticulos.DataBind();
+            }
+
+        }
+
+        protected void VerDetalle_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("DetalleArticulo.aspx");
         }
     }
 }

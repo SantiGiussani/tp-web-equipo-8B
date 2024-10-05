@@ -19,7 +19,7 @@
                     <asp:TextBox ID="txtVoucher" CssClass="form-control" placeholder="XXXXXXXXXXXXXXX" runat="server" />
                 </div>
                 <div class="col-auto">
-                    <span id="passwordHelpInline" class="form-text">Máximo 50 caracteres.
+                    <span id="maxLongVoucher" class="form-text">Máximo 50 caracteres.
                     </span>
                 </div>
             </div>
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <% /*<div class="row">
+<% /*<div class="row">
 <div class="col-2"></div>
 <div class="col">
 <div class="mb-3">
@@ -41,5 +41,6 @@
 </div>
 <div class="col-2"></div>
 </div>*/%>
+
 </asp:Content>
 

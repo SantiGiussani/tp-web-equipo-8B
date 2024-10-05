@@ -37,7 +37,7 @@
                             <h5 class="card-title text-center"><strong><%# Eval("Nombre") %></strong></h5>
                             <p class="card-text text-center"><%# Eval("Descripcion") %></p>
                             <div class="mt-auto d-flex justify-content-center">
-                                <asp:Button Text="Ver Detalle" CssClass="btn btn-dark" runat="server" />
+                                <asp:Button Text="Ver Detalle" ID="VerDetalle" CssClass="btn btn-dark" OnClick="VerDetalle_Click" runat="server" />
                             </div>
                         </div>
                     </div>
