@@ -20,7 +20,7 @@ namespace dominio
 
         public override string ToString()
         {
-            return nombre + " " + apellido;
+            return nombre+" "+apellido;
         }
 
 

@@ -4,54 +4,74 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using negocio;
 using dominio;
+using negocio;
 
 namespace TP_Web
 {
     public partial class Contacto : System.Web.UI.Page
     {
+        private Cliente clienteAux = new Cliente();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                txtDNI.Attributes.Add("required", "required");
+                txtApellido.Attributes.Add("required", "required");
+                txtNombre.Attributes.Add("required", "required");
+                txtDireccion.Attributes.Add("required", "required");
+                txtCiudad.Attributes.Add("required", "required");
+                txtCP.Attributes.Add("required", "required");
+                txtEmail.Attributes.Add("required", "required");
             }
             else
             {
-                txtboxNombre.Enabled = false;
-                txtboxApellido.Enabled = false;
-                txtboxDireccion.Enabled = false;
-                txtboxCiudad.Enabled = false;
-                txtboxEmail.Enabled = false;
-                txtboxCP.Enabled = false;
+                txtNombre.Enabled = false;
+                txtApellido.Enabled = false;
+                txtDireccion.Enabled = false;
+                txtCiudad.Enabled = false;
+                txtCP.Enabled = false;
+                txtEmail.Enabled = false;
+                btnConfirmar.Enabled = true;
             }
         }
 
         protected void txtDNI_TextChanged(object sender, EventArgs e)
         {
             ClienteNegocio ingreso = new ClienteNegocio();
-            bool estado = ingreso.verificarCliente(txtboxDNI.Text);
+            bool estado = ingreso.verificarCliente(txtDNI.Text);
 
-            if (txtboxDNI.Text.Length <= 50)
+            if (txtDNI.Text.Length <= 50)
             {
                 switch (estado)
                 {
                     case false:
                         //Cliente inexistente
                         ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El DNI ingresado no existe. Registrese a continuación');", true);
-                        txtboxNombre.Enabled = true;
-                        txtboxApellido.Enabled = true;
-                        txtboxDireccion.Enabled = true;
-                        txtboxCiudad.Enabled = true;
-                        txtboxCP.Enabled = true;
-                        txtboxEmail.Enabled = true;
+                        txtNombre.Enabled = true;
+                        txtApellido.Enabled = true;
+                        txtDireccion.Enabled = true;
+                        txtCiudad.Enabled = true;
+                        txtCP.Enabled = true;
+                        txtEmail.Enabled = true;
+                        btnConfirmar.Enabled = true;
                         break;
 
                     case true:
                         //Cliente ya registrado
                         ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('DNI cargado correctamente!');", true);
-                        Session.Add("DNI", txtboxDNI.Text);
+                        Session.Add("DNI", txtDNI.Text);
 
+                        clienteAux = ingreso.buscarCliente(txtDNI.Text);
+
+                        txtID.Text = clienteAux.id.ToString();
+                        txtDNI.Text = clienteAux.documento;
+                        txtNombre.Text = clienteAux.nombre;
+                        txtApellido.Text = clienteAux.apellido;
+                        txtDireccion.Text = clienteAux.direccion;
+                        txtCiudad.Text = clienteAux.ciudad;
+                        txtEmail.Text = clienteAux.email;
+                        txtCP.Text = clienteAux.codigoPostal.ToString();
                         break;
                 }
             }
@@ -61,41 +81,39 @@ namespace TP_Web
             }
         }
 
-        protected bool validarCasillas()
+        protected void btnConfirmar_Click(object sender, EventArgs e)
         {
-            if (txtboxDNI.Text == ""
-                || txtboxNombre.Text == ""
-                || txtboxApellido.Text == ""
-                || txtboxEmail.Text == "" ||
-                txtboxDireccion.Text == ""
-                || txtboxCiudad.Text == ""
-                || txtboxCP.Text == "")
-                return false;
-            return true;
-        }
+            ClienteNegocio negocio = new ClienteNegocio();
 
-        protected void Click(object sender, EventArgs e)
-        {
-            bool val;
-            val = validarCasillas();
-            if (val)
+            if (!negocio.verificarCliente(txtDNI.Text))
             {
-                ClienteNegocio clienteNegocio = new ClienteNegocio();
-                Cliente cliente = new Cliente();
-                cliente.documento = txtboxDNI.Text;
-                cliente.nombre = txtboxNombre.Text;
-                cliente.apellido = txtboxApellido.Text;
-                cliente.email = txtboxEmail.Text;
-                cliente.direccion = txtboxDireccion.Text;
-                cliente.ciudad = txtboxCiudad.Text;
-                cliente.codigoPostal = int.Parse(txtboxCP.Text);
-                clienteNegocio.AgregarCliente(cliente);
+                try
+                {
+                    //CARGA NUEVO CLIENTE
+                    clienteAux.documento = txtDNI.Text;
+                    clienteAux.nombre = txtNombre.Text;
+                    clienteAux.apellido = txtApellido.Text;
+                    clienteAux.direccion = txtDireccion.Text;
+                    clienteAux.ciudad = txtCiudad.Text;
+                    clienteAux.email = txtEmail.Text;
+                    clienteAux.codigoPostal = int.Parse(txtCP.Text);
+
+                    negocio.agregarCliente(clienteAux);
+
+                    
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al verificar el código de cliente.", ex);
+                }
             }
             else
             {
-                Incompleto.Visible = true;
+                //CARGA CLIENTE UTILIZADO
             }
 
+            Response.Redirect("FinalizacionExitosa.aspx", false);
         }
     }
 }

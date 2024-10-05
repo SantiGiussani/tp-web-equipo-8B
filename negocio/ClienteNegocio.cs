@@ -48,6 +48,65 @@ namespace negocio
             }
         }
 
+        public void agregarCliente(Cliente cliente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO Clientes (Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) VALUES (@Documento, @Nombre, @Apellido, @Email, @Direccion, @Ciudad, @Cp)");
+                datos.setearParametro("@Documento", cliente.documento);
+                datos.setearParametro("@Nombre", cliente.nombre);
+                datos.setearParametro("@Apellido", cliente.apellido);
+                datos.setearParametro("@Email", cliente.email);
+                datos.setearParametro("@Direccion", cliente.direccion);
+                datos.setearParametro("@Ciudad", cliente.ciudad);
+                datos.setearParametro("@Cp", cliente.codigoPostal);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Cliente buscarCliente(string dni) { 
+            Cliente cliente = new Cliente();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Id, Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP FROM Clientes WHERE Documento = @documento");
+                datos.setearParametro("@documento", dni);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    cliente.id = (int)datos.Lector["Id"];
+                    cliente.documento = (string)datos.Lector["Documento"];
+                    cliente.nombre = (string)datos.Lector["Nombre"];
+                    cliente.apellido = (string)datos.Lector["Apellido"];
+                    cliente.email = (string)datos.Lector["Email"];
+                    cliente.direccion = (string)datos.Lector["Direccion"];
+                    cliente.ciudad = (string)datos.Lector["Ciudad"];
+                    cliente.codigoPostal = (int)datos.Lector["CP"];
+                }
+                return cliente;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public bool verificarCliente(string dni)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -72,32 +131,6 @@ namespace negocio
             finally
             {
                 datos.cerrarConexion();
-            }
-        }
-
-        public void AgregarCliente(Cliente datos)
-        {
-            AccesoDatos accesoDatos = new AccesoDatos();
-            try
-            {
-                accesoDatos.setearConsulta("INSERT INTO Clientes(Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) VALUES(@Documento, @Nombre, @Apellido, @Email, @Direccion, @Ciudad, @CP)");
-                accesoDatos.setearParametro("@Documento", datos.documento);
-                accesoDatos.setearParametro("@Nombre", datos.nombre);
-                accesoDatos.setearParametro("@Apellido", datos.apellido);
-                accesoDatos.setearParametro("@Email", datos.email);
-                accesoDatos.setearParametro("@Direccion", datos.direccion);
-                accesoDatos.setearParametro("@Ciudad", datos.ciudad);
-                accesoDatos.setearParametro("@CP", datos.codigoPostal);
-                accesoDatos.ejecutarAccion();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-
-            }
-            finally
-            {
-                accesoDatos.cerrarConexion();
             }
         }
 
