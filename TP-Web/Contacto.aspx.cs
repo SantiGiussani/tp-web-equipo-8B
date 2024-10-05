@@ -11,7 +11,12 @@ namespace TP_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        protected void txtbox_ID_TextChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
