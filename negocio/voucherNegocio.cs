@@ -21,7 +21,7 @@ namespace negocio
                 while (datos.Lector.Read())
                 {
                     Voucher aux = new Voucher();
-                    aux.codigoVoucher = (string)datos.Lector["CodigoVoucher"]; 
+                    aux.codigoVoucher = (string)datos.Lector["CodigoVoucher"];
                     aux.idCliente = (int)datos.Lector["IdCliente"];
 
                     // Manejar el valor nulo de IdArticulo
@@ -50,20 +50,12 @@ namespace negocio
             }
         }
 
-
-
-
-
         public enum EstadoVoucher
         {
             Inexistente,
             Utilizado,
             Valido
         }
-
-
-
-
 
         public EstadoVoucher verificarCodigo(string codigo)
         {
@@ -105,10 +97,5 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
-
-
-
-
-
     }
 }

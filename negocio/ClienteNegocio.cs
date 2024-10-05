@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,8 @@ namespace negocio
 {
     public class ClienteNegocio
     {
-        public List<Cliente> listar() { 
+        public List<Cliente> listar()
+        {
             List<Cliente> lista = new List<Cliente>();
             AccesoDatos datos = new AccesoDatos();
             try
@@ -46,7 +48,32 @@ namespace negocio
             }
         }
 
+        public bool verificarCliente(string dni)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Documento FROM Clientes WHERE Documento = @documento");
+                datos.setearParametro("@documento", dni);
+                SqlDataReader lector = datos.ejecutarLectura();
+
+                if (!lector.HasRows)
+                {
+                    return false;
+                }
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al verificar el código de cliente.", ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
-
-
 }
