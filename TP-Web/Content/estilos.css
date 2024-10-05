@@ -3,8 +3,6 @@
     margin: 0; /* Quita márgenes por defecto */
 }
 
-
-
 form {
     flex: 1;
 }
@@ -18,4 +16,3 @@ footer {
 .despegarBarra{
     margin-top:5rem;
 }
-

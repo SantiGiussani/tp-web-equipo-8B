@@ -25,12 +25,14 @@ namespace TP_Web
             {
                 case EstadoVoucher.Inexistente:
                     // Mensaje de voucher inexistente
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El voucher ingresado no existe.');", true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El voucher ingresado no existe.');", true);
+                    Response.Redirect("ErrorVoucher.aspx?tipo=0", false);
                     break;
 
                 case EstadoVoucher.Utilizado:
                     // Mensaje de voucher ya utilizado
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El voucher ya ha sido utilizado.');", true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El voucher ya ha sido utilizado.');", true);
+                    Response.Redirect("ErrorVoucher.aspx?tipo=1", false);
                     break;
 
                 case EstadoVoucher.Valido:

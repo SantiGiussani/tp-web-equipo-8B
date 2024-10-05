@@ -23,7 +23,8 @@ namespace TP_Web
         protected void btnElegirPremio_Click(object sender, EventArgs e)
         {
             string IDArticulo = ((Button)sender).CommandArgument;
-            Response.Redirect("Contacto.aspx?ID=" + IDArticulo);
+            Session.Add("idArticulo", IDArticulo);
+            //Response.Redirect("Contacto.aspx?ID=" + IDArticulo);
         }
     }
 }
