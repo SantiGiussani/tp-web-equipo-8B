@@ -24,6 +24,7 @@ namespace TP_Web
         {
             string IDArticulo = ((Button)sender).CommandArgument;
             Session.Add("idArticulo", IDArticulo);
+            Response.Redirect("Contacto.aspx");
             //Response.Redirect("Contacto.aspx?ID=" + IDArticulo);
         }
     }

@@ -94,6 +94,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\estilos.css" />
     <Content Include="ErrorVoucher.aspx" />
+    <Content Include="FinalizacionExitosa.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="obj\Debug\TP-Web.csproj.FileListAbsolute.txt" />
@@ -123,6 +124,13 @@
     </Compile>
     <Compile Include="ErrorVoucher.aspx.designer.cs">
       <DependentUpon>ErrorVoucher.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FinalizacionExitosa.aspx.cs">
+      <DependentUpon>FinalizacionExitosa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FinalizacionExitosa.aspx.designer.cs">
+      <DependentUpon>FinalizacionExitosa.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
