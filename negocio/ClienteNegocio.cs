@@ -25,13 +25,13 @@ namespace negocio
                 {
                     Cliente aux = new Cliente();
                     aux.id = (int)datos.Lector["Id"];
-                    aux.documento = (int)datos.Lector["Documento"];
+                    aux.documento = (string)datos.Lector["Documento"];
                     aux.nombre = (string)datos.Lector["Nombre"];
                     aux.apellido = (string)datos.Lector["Apellido"];
                     aux.email = (string)datos.Lector["Email"];
                     aux.direccion = (string)datos.Lector["Direccion"];
                     aux.ciudad = (string)datos.Lector["Ciudad"];
-                    aux.codigoPostal = (string)datos.Lector["CP"];
+                    aux.codigoPostal = (int)datos.Lector["CP"];
                     lista.Add(aux);
                 }
                 return lista;
@@ -72,6 +72,32 @@ namespace negocio
             finally
             {
                 datos.cerrarConexion();
+            }
+        }
+
+        public void AgregarCliente(Cliente datos)
+        {
+            AccesoDatos accesoDatos = new AccesoDatos();
+            try
+            {
+                accesoDatos.setearConsulta("INSERT INTO Clientes(Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) VALUES(@Documento, @Nombre, @Apellido, @Email, @Direccion, @Ciudad, @CP)");
+                accesoDatos.setearParametro("@Documento", datos.documento);
+                accesoDatos.setearParametro("@Nombre", datos.nombre);
+                accesoDatos.setearParametro("@Apellido", datos.apellido);
+                accesoDatos.setearParametro("@Email", datos.email);
+                accesoDatos.setearParametro("@Direccion", datos.direccion);
+                accesoDatos.setearParametro("@Ciudad", datos.ciudad);
+                accesoDatos.setearParametro("@CP", datos.codigoPostal);
+                accesoDatos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+            finally
+            {
+                accesoDatos.cerrarConexion();
             }
         }
 
