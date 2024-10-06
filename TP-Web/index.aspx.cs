@@ -38,8 +38,11 @@ namespace TP_Web
                         break;
 
                     case EstadoVoucher.Valido:
+                        if (txtVoucher != null)
+                        {
+                            Session.Add("idVoucher", txtVoucher.Text);
+                        }
                         ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Voucher cargado correctamente! Por favor elija el artículo que desea.'); window.location='Articulos.aspx';", true);
-                        Session.Add("idVoucher", txtVoucher.Text);
                         break;
                 }
             }

@@ -12,6 +12,8 @@ namespace TP_Web
     public partial class Contacto : System.Web.UI.Page
     {
         private Cliente clienteAux = new Cliente();
+        int articuloElegido;
+        string voucherUsado;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -23,6 +25,7 @@ namespace TP_Web
                 txtCiudad.Attributes.Add("required", "required");
                 txtCP.Attributes.Add("required", "required");
                 txtEmail.Attributes.Add("required", "required");
+             
             }
             else
             {
@@ -34,6 +37,14 @@ namespace TP_Web
                 txtEmail.Enabled = false;
                 btnConfirmar.Enabled = true;
             }
+
+
+            if (Session["idArticulo"] != null && Session["idVoucher"] != null)
+            {
+                articuloElegido = int.Parse(Session["idArticulo"].ToString());//Como es una textbox primero tengo que pasarla a string y luego con parse pasarla a int
+                voucherUsado = Session["idVoucher"].ToString();
+            }
+
         }
 
         protected void txtDNI_TextChanged(object sender, EventArgs e)
@@ -84,6 +95,9 @@ namespace TP_Web
         protected void btnConfirmar_Click(object sender, EventArgs e)
         {
             ClienteNegocio negocio = new ClienteNegocio();
+            voucherNegocio agregar = new voucherNegocio();
+
+            System.Diagnostics.Debug.WriteLine($"Voucher Usado: {voucherUsado}");
 
             if (!negocio.verificarCliente(txtDNI.Text))
             {
@@ -99,9 +113,11 @@ namespace TP_Web
                     clienteAux.codigoPostal = int.Parse(txtCP.Text);
 
                     negocio.agregarCliente(clienteAux);
-
+                    Cliente clienteConId = new Cliente();
+                    clienteConId=negocio.buscarCliente(clienteAux.documento);
+                    agregar.agergarVoucher(clienteConId,articuloElegido,voucherUsado);
                     
-
+                     
                 }
                 catch (Exception ex)
                 {

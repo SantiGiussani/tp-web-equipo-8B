@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,5 +98,36 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public void agergarVoucher(Cliente canjeo,int articuloElegido,string voucherUsado)
+        {
+
+            AccesoDatos datos = new AccesoDatos();
+
+                try
+                {
+                    
+                    datos.setearConsulta("UPDATE Vouchers SET IdCliente=@Id,FechaCanje=@FechaActual,IdArticulo=@ArticuloElegido WHERE CodigoVoucher=@VoucherUsado");
+                    datos.setearParametro("@Id", canjeo.id);
+                    datos.setearParametro("@FechaActual",(DateTime)DateTime.Today);
+                    datos.setearParametro("@ArticuloElegido", articuloElegido);
+                    datos.setearParametro("@VoucherUsado", (string)voucherUsado);
+                    datos.ejecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    datos.cerrarConexion();
+                }
+            
+
+
+        }
+
+
+
+
     }
 }
