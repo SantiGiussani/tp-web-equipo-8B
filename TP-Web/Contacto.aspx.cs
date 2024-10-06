@@ -26,7 +26,6 @@ namespace TP_Web
                 txtCiudad.Attributes.Add("required", "required");
                 txtCP.Attributes.Add("required", "required");
                 txtEmail.Attributes.Add("required", "required");
-             
             }
             else
             {
@@ -119,6 +118,9 @@ namespace TP_Web
             else
             {
                 //CARGA CLIENTE UTILIZADO
+                Cliente clienteConId = new Cliente();
+                clienteConId = negocio.buscarCliente(txtDNI.Text);
+                agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
             }
 
             Response.Redirect("FinalizacionExitosa.aspx", false);
