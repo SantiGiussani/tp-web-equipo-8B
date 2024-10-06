@@ -97,7 +97,7 @@ namespace TP_Web
             voucherNegocio agregar = new voucherNegocio();
 
             System.Diagnostics.Debug.WriteLine($"Voucher Usado: {voucherUsado}");
-            
+
             clienteAux.id = 0;
             clienteAux.documento = txtDNI.Text;
             clienteAux.nombre = txtNombre.Text;
@@ -106,60 +106,85 @@ namespace TP_Web
             clienteAux.ciudad = txtCiudad.Text;
             clienteAux.email = txtEmail.Text;
             clienteAux.codigoPostal = 0;
-            
-            if (soloNumeros(txtDNI.Text) && (txtDNI.Text.Length == 8 || txtDNI.Text.Length == 7))
+
+            if (soloNumeros(txtCP.Text) && verificarDNI(txtDNI.Text) && verificarMail(txtEmail.Text))
             {
                 clienteAux.documento = txtDNI.Text;
+                clienteAux.codigoPostal = int.Parse(txtCP.Text);
 
-                if (soloNumeros(txtCP.Text))
+                if (!negocio.verificarCliente(txtDNI.Text))
                 {
-                    clienteAux.codigoPostal = int.Parse(txtCP.Text);
-
-                    if (!negocio.verificarCliente(txtDNI.Text))
+                    try
                     {
-                        try
-                        {
-                            //CARGA NUEVO CLIENTE
-                            clienteAux.documento = txtDNI.Text;
-                            clienteAux.nombre = txtNombre.Text;
-                            clienteAux.apellido = txtApellido.Text;
-                            clienteAux.direccion = txtDireccion.Text;
-                            clienteAux.ciudad = txtCiudad.Text;
-                            clienteAux.email = txtEmail.Text;
-                            clienteAux.codigoPostal = int.Parse(txtCP.Text);
+                        //CARGA NUEVO CLIENTE
+                        clienteAux.documento = txtDNI.Text;
+                        clienteAux.nombre = txtNombre.Text;
+                        clienteAux.apellido = txtApellido.Text;
+                        clienteAux.direccion = txtDireccion.Text;
+                        clienteAux.ciudad = txtCiudad.Text;
+                        clienteAux.email = txtEmail.Text;
+                        clienteAux.codigoPostal = int.Parse(txtCP.Text);
 
-                            negocio.agregarCliente(clienteAux);
-                            Cliente clienteConId = new Cliente();
-                            clienteConId = negocio.buscarCliente(clienteAux.documento);
-                            agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Error al verificar el código de cliente.", ex);
-                        }
-                    }
-                    else
-                    {
-                        //CARGA CLIENTE UTILIZADO
+                        negocio.agregarCliente(clienteAux);
                         Cliente clienteConId = new Cliente();
-                        clienteConId = negocio.buscarCliente(txtDNI.Text);
+                        clienteConId = negocio.buscarCliente(clienteAux.documento);
                         agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
+
                     }
-                    Response.Redirect("FinalizacionExitosa.aspx", false);
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error al verificar el código de cliente.", ex);
+                    }
                 }
                 else
                 {
-                    txtCP.CssClass = "form-control is-invalid";
+                    //CARGA CLIENTE UTILIZADO
+                    Cliente clienteConId = new Cliente();
+                    clienteConId = negocio.buscarCliente(txtDNI.Text);
+                    agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
                 }
+                Response.Redirect("FinalizacionExitosa.aspx", false);
+
             }
             else
             {
-                txtDNI.CssClass = "form-control is-invalid";
+                if (!soloNumeros(txtCP.Text))
+                {
+                    txtCP.CssClass = "form-control is-invalid";
+                }
+                else
+                {
+                    txtCP.CssClass = "form-control";
+                }
+
+                if (!verificarDNI(txtDNI.Text))
+                {
+                    txtDNI.CssClass = "form-control is-invalid";
+                }
+                else
+                {
+                    txtDNI.CssClass = "form-control";
+                }
+
+
+
+
+                if (!verificarMail(txtEmail.Text))
+                {
+                    txtEmail.CssClass = "form-control is-invalid";
+                }
+                else
+                {
+                    txtEmail.CssClass = "form-control";
+                }
+
+
+
             }
         }
 
-        protected void conservarDatos() {
+        protected void conservarDatos()
+        {
             if (Session["cliente"] != null)
             {
                 txtID.Text = clienteAux.id == 0 ? "" : clienteAux.id.ToString();
@@ -192,7 +217,7 @@ namespace TP_Web
             txtCP.Enabled = true;
             txtEmail.Enabled = true;
             btnConfirmar.Enabled = true;
-            txtID.Text = clienteAux.id==0 ? string.Empty : string.Empty;
+            txtID.Text = clienteAux.id == 0 ? string.Empty : string.Empty;
             txtNombre.Text = string.Empty;
             txtApellido.Text = string.Empty;
             txtDireccion.Text = string.Empty;
@@ -228,6 +253,30 @@ namespace TP_Web
                     return false;
             }
             return true;
+        }
+
+
+        private bool verificarDNI(string cadena)
+        {
+            if (soloNumeros(cadena) && cadena.Length == 8 || cadena.Length == 7)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        private bool verificarMail(string cadena)
+        {
+            if ((cadena.Contains("@") && cadena.EndsWith(".com")))
+            {
+                return true;
+            }
+            else return false;
+
         }
     }
 }
