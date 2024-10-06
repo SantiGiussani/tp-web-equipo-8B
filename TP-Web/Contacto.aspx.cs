@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,8 +14,10 @@ namespace TP_Web
     public partial class Contacto : System.Web.UI.Page
     {
         private Cliente clienteAux = new Cliente();
+
         int articuloElegido;
         string voucherUsado;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -26,16 +29,20 @@ namespace TP_Web
                 txtCiudad.Attributes.Add("required", "required");
                 txtCP.Attributes.Add("required", "required");
                 txtEmail.Attributes.Add("required", "required");
+                reiniciarFormulario();
+                Session["clienteID"] = 0;
             }
             else
             {
-                txtNombre.Enabled = false;
-                txtApellido.Enabled = false;
-                txtDireccion.Enabled = false;
-                txtCiudad.Enabled = false;
-                txtCP.Enabled = false;
-                txtEmail.Enabled = false;
-                btnConfirmar.Enabled = true;
+                int clienteID = (int)Session["clienteID"];
+                if (clienteID != 0)
+                {
+                    reiniciarFormulario();
+                }
+                else
+                {
+                    conservarDatos();
+                }
             }
 
             if (Session["idArticulo"] != null && Session["idVoucher"] != null)
@@ -50,6 +57,7 @@ namespace TP_Web
             ClienteNegocio ingreso = new ClienteNegocio();
             bool estado = ingreso.verificarCliente(txtDNI.Text);
 
+
             if (txtDNI.Text.Length <= 50)
             {
                 switch (estado)
@@ -57,7 +65,8 @@ namespace TP_Web
                     case false:
                         //Cliente inexistente
                         lblDniAviso.Text = "Usted no se encuentra registrado. Registrese a continuación...";
-                        reiniciarFormulario();
+                        activarFormulario();
+                        Session["clienteID"] = 0;
                         break;
 
                     case true:
@@ -67,14 +76,10 @@ namespace TP_Web
 
                         clienteAux = ingreso.buscarCliente(txtDNI.Text);
 
-                        txtID.Text = clienteAux.id.ToString();
-                        txtDNI.Text = clienteAux.documento;
-                        txtNombre.Text = clienteAux.nombre;
-                        txtApellido.Text = clienteAux.apellido;
-                        txtDireccion.Text = clienteAux.direccion;
-                        txtCiudad.Text = clienteAux.ciudad;
-                        txtEmail.Text = clienteAux.email;
-                        txtCP.Text = clienteAux.codigoPostal.ToString();
+                        Session["clienteID"] = clienteAux.id;
+
+                        precargarCliente();
+
                         break;
                 }
             }
@@ -82,6 +87,8 @@ namespace TP_Web
             {
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El tamaño del codigo es inapropiado.');", true);
             }
+
+            conservarDatos();
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
@@ -90,40 +97,90 @@ namespace TP_Web
             voucherNegocio agregar = new voucherNegocio();
 
             System.Diagnostics.Debug.WriteLine($"Voucher Usado: {voucherUsado}");
-
-            if (!negocio.verificarCliente(txtDNI.Text))
+            
+            clienteAux.id = 0;
+            clienteAux.documento = txtDNI.Text;
+            clienteAux.nombre = txtNombre.Text;
+            clienteAux.apellido = txtApellido.Text;
+            clienteAux.direccion = txtDireccion.Text;
+            clienteAux.ciudad = txtCiudad.Text;
+            clienteAux.email = txtEmail.Text;
+            clienteAux.codigoPostal = 0;
+            
+            if (soloNumeros(txtDNI.Text) && (txtDNI.Text.Length == 8 || txtDNI.Text.Length == 7))
             {
-                try
+                clienteAux.documento = txtDNI.Text;
+
+                if (soloNumeros(txtCP.Text))
                 {
-                    //CARGA NUEVO CLIENTE
-                    clienteAux.documento = txtDNI.Text;
-                    clienteAux.nombre = txtNombre.Text;
-                    clienteAux.apellido = txtApellido.Text;
-                    clienteAux.direccion = txtDireccion.Text;
-                    clienteAux.ciudad = txtCiudad.Text;
-                    clienteAux.email = txtEmail.Text;
                     clienteAux.codigoPostal = int.Parse(txtCP.Text);
 
-                    negocio.agregarCliente(clienteAux);
-                    Cliente clienteConId = new Cliente();
-                    clienteConId=negocio.buscarCliente(clienteAux.documento);
-                    agregar.agregarVoucher(clienteConId,articuloElegido,voucherUsado);
-                    
+                    if (!negocio.verificarCliente(txtDNI.Text))
+                    {
+                        try
+                        {
+                            //CARGA NUEVO CLIENTE
+                            clienteAux.documento = txtDNI.Text;
+                            clienteAux.nombre = txtNombre.Text;
+                            clienteAux.apellido = txtApellido.Text;
+                            clienteAux.direccion = txtDireccion.Text;
+                            clienteAux.ciudad = txtCiudad.Text;
+                            clienteAux.email = txtEmail.Text;
+                            clienteAux.codigoPostal = int.Parse(txtCP.Text);
+
+                            negocio.agregarCliente(clienteAux);
+                            Cliente clienteConId = new Cliente();
+                            clienteConId = negocio.buscarCliente(clienteAux.documento);
+                            agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Error al verificar el código de cliente.", ex);
+                        }
+                    }
+                    else
+                    {
+                        //CARGA CLIENTE UTILIZADO
+                        Cliente clienteConId = new Cliente();
+                        clienteConId = negocio.buscarCliente(txtDNI.Text);
+                        agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
+                    }
+                    Response.Redirect("FinalizacionExitosa.aspx", false);
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw new Exception("Error al verificar el código de cliente.", ex);
+                    txtCP.CssClass = "form-control is-invalid";
                 }
             }
             else
             {
-                //CARGA CLIENTE UTILIZADO
-                Cliente clienteConId = new Cliente();
-                clienteConId = negocio.buscarCliente(txtDNI.Text);
-                agregar.agregarVoucher(clienteConId, articuloElegido, voucherUsado);
+                txtDNI.CssClass = "form-control is-invalid";
             }
+        }
 
-            Response.Redirect("FinalizacionExitosa.aspx", false);
+        protected void conservarDatos() {
+            if (Session["cliente"] != null)
+            {
+                txtID.Text = clienteAux.id == 0 ? "" : clienteAux.id.ToString();
+                txtNombre.Text = clienteAux.nombre;
+                txtApellido.Text = clienteAux.apellido;
+                txtDireccion.Text = clienteAux.direccion;
+                txtCiudad.Text = clienteAux.ciudad;
+                txtCP.Text = clienteAux.codigoPostal == 0 ? "" : clienteAux.codigoPostal.ToString();
+                txtEmail.Text = clienteAux.email;
+            }
+        }
+
+        protected void activarFormulario()
+        {
+            txtNombre.Enabled = true;
+            txtApellido.Enabled = true;
+            txtDireccion.Enabled = true;
+            txtCiudad.Enabled = true;
+            txtCP.Enabled = true;
+            txtEmail.Enabled = true;
+            btnConfirmar.Enabled = true;
         }
 
         protected void reiniciarFormulario()
@@ -135,13 +192,42 @@ namespace TP_Web
             txtCP.Enabled = true;
             txtEmail.Enabled = true;
             btnConfirmar.Enabled = true;
-            txtID.Text = string.Empty;
+            txtID.Text = clienteAux.id==0 ? string.Empty : string.Empty;
             txtNombre.Text = string.Empty;
             txtApellido.Text = string.Empty;
             txtDireccion.Text = string.Empty;
             txtCiudad.Text = string.Empty;
-            txtCP.Text = string.Empty;
+            txtCP.Text = clienteAux.codigoPostal == 0 ? string.Empty : string.Empty;
             txtEmail.Text = string.Empty;
+        }
+
+        protected void precargarCliente()
+        {
+            txtID.Text = clienteAux.id.ToString();
+            txtDNI.Text = clienteAux.documento;
+            txtNombre.Text = clienteAux.nombre;
+            txtApellido.Text = clienteAux.apellido;
+            txtDireccion.Text = clienteAux.direccion;
+            txtCiudad.Text = clienteAux.ciudad;
+            txtEmail.Text = clienteAux.email;
+            txtCP.Text = clienteAux.codigoPostal.ToString();
+            txtNombre.Enabled = false;
+            txtApellido.Enabled = false;
+            txtDireccion.Enabled = false;
+            txtCiudad.Enabled = false;
+            txtCP.Enabled = false;
+            txtEmail.Enabled = false;
+            btnConfirmar.Enabled = true;
+        }
+
+        private bool soloNumeros(string cadena)
+        {
+            foreach (char caracter in cadena)
+            {
+                if (!(char.IsNumber(caracter)))
+                    return false;
+            }
+            return true;
         }
     }
 }
