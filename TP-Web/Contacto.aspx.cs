@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -38,13 +39,11 @@ namespace TP_Web
                 btnConfirmar.Enabled = true;
             }
 
-
             if (Session["idArticulo"] != null && Session["idVoucher"] != null)
             {
                 articuloElegido = int.Parse(Session["idArticulo"].ToString());//Como es una textbox primero tengo que pasarla a string y luego con parse pasarla a int
                 voucherUsado = Session["idVoucher"].ToString();
             }
-
         }
 
         protected void txtDNI_TextChanged(object sender, EventArgs e)
@@ -58,19 +57,13 @@ namespace TP_Web
                 {
                     case false:
                         //Cliente inexistente
-                        ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El DNI ingresado no existe. Registrese a continuación');", true);
-                        txtNombre.Enabled = true;
-                        txtApellido.Enabled = true;
-                        txtDireccion.Enabled = true;
-                        txtCiudad.Enabled = true;
-                        txtCP.Enabled = true;
-                        txtEmail.Enabled = true;
-                        btnConfirmar.Enabled = true;
+                        lblDniAviso.Text = "Usted no se encuentra registrado. Registrese a continuación...";
+                        reiniciarFormulario();
                         break;
 
                     case true:
                         //Cliente ya registrado
-                        ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('DNI cargado correctamente!');", true);
+                        lblDniAviso.Text = "DNI cargado correctamente.";
                         Session.Add("DNI", txtDNI.Text);
 
                         clienteAux = ingreso.buscarCliente(txtDNI.Text);
@@ -115,9 +108,8 @@ namespace TP_Web
                     negocio.agregarCliente(clienteAux);
                     Cliente clienteConId = new Cliente();
                     clienteConId=negocio.buscarCliente(clienteAux.documento);
-                    agregar.agergarVoucher(clienteConId,articuloElegido,voucherUsado);
+                    agregar.agregarVoucher(clienteConId,articuloElegido,voucherUsado);
                     
-                     
                 }
                 catch (Exception ex)
                 {
@@ -130,6 +122,24 @@ namespace TP_Web
             }
 
             Response.Redirect("FinalizacionExitosa.aspx", false);
+        }
+
+        protected void reiniciarFormulario()
+        {
+            txtNombre.Enabled = true;
+            txtApellido.Enabled = true;
+            txtDireccion.Enabled = true;
+            txtCiudad.Enabled = true;
+            txtCP.Enabled = true;
+            txtEmail.Enabled = true;
+            btnConfirmar.Enabled = true;
+            txtID.Text = string.Empty;
+            txtNombre.Text = string.Empty;
+            txtApellido.Text = string.Empty;
+            txtDireccion.Text = string.Empty;
+            txtCiudad.Text = string.Empty;
+            txtCP.Text = string.Empty;
+            txtEmail.Text = string.Empty;
         }
     }
 }

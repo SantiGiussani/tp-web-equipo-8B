@@ -98,7 +98,7 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
-        public void agergarVoucher(Cliente canjeo,int articuloElegido,string voucherUsado)
+        public void agregarVoucher(Cliente canjeo,int articuloElegido,string voucherUsado)
         {
 
             AccesoDatos datos = new AccesoDatos();
